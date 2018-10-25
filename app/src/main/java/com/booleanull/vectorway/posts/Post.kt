@@ -1,9 +1,8 @@
 package com.booleanull.vectorway.posts
-
 data class Post(
-    val id : Int,
-    val name : String,
-    val title : String,
-    val date : String,
-    val way : Int,
-    val level : Int)
+    val id : Int = 0,
+    val title : String = "Title",
+    val text : String = "Some text",
+    val date : String = "Date",
+    val way : Int = 0,
+    val level : Int = 0)
