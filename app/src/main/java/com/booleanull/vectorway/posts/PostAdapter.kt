@@ -16,15 +16,15 @@ import android.widget.TextView
 import com.booleanull.vectorway.R
 
 
-class PostAdapter(val layoutInflater: LayoutInflater, val posts: List<Post>) :
-        RecyclerView.Adapter<PostAdapter.ViewHolder>() {
+class PostAdapter(val layoutInflater: LayoutInflater, private val items: MutableList<ViewInPost>) :
+        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val colors = arrayOf(
+    private val colors = arrayOf(
             R.color.colorRed,
             R.color.colorOrange,
             R.color.colorGreen)
 
-    val icons = arrayOf(
+    private val icons = arrayOf(
             R.drawable.ic_free_way,
             R.drawable.ic_ai_icon,
             R.drawable.ic_desktop_icon,
@@ -36,36 +36,46 @@ class PostAdapter(val layoutInflater: LayoutInflater, val posts: List<Post>) :
             R.drawable.ic_lowlevel_icon
     )
 
-    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
+    override fun onCreateViewHolder(p0: ViewGroup, type: Int): RecyclerView.ViewHolder {
+        if(type == 1) {
+            val view: View = layoutInflater.inflate(R.layout.layout_event, p0, false)
+            return EventHolder(view)
+        }
         val view: View = layoutInflater.inflate(R.layout.layout_post, p0, false)
-        return ViewHolder(view)
+        return PostHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return posts.size
+        return items.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, p1: Int) {
-        holder.title.text = posts[holder.adapterPosition].title
-        holder.text.text = posts[holder.adapterPosition].text
-        holder.date.text = posts[holder.adapterPosition].date
-        holder.back.setBackgroundColor(
-                ContextCompat.getColor(
-                        layoutInflater.context,
-                        getColorBack(posts[holder.adapterPosition].level)
-                )
-        )
-        holder.icon.setImageResource(getImageIcon(posts[holder.adapterPosition].way))
+    override fun getItemViewType(position: Int): Int {
+        return items[position].getViewId()
+    }
 
-        if(posts[holder.adapterPosition].site.equals(""))
-            holder.link.visibility = View.GONE
-        else
-            holder.link.visibility = View.VISIBLE
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, p1: Int) {
+        if(holder.itemViewType == 0) {
+            val post : Post = items[holder.adapterPosition] as Post
+            val postHolder = holder as PostHolder
+            postHolder.title.text = post.title
+            postHolder.text.text = post.text
+            postHolder.date.text = post.date
+            postHolder.back.setBackgroundColor(
+                    ContextCompat.getColor(
+                            layoutInflater.context,
+                            getColorBack(post.level)
+                    )
+            )
+            postHolder.icon.setImageResource(getImageIcon(post.way))
 
-        holder.card.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                if (!posts[holder.adapterPosition].site.equals("")) {
-                    val uriUrl = Uri.parse(posts[holder.adapterPosition].site)
+            if (post.site.equals(""))
+                postHolder.link.visibility = View.GONE
+            else
+                postHolder.link.visibility = View.VISIBLE
+
+            postHolder.card.setOnClickListener { v ->
+                if (!post.site.equals("")) {
+                    val uriUrl = Uri.parse(post.site)
                     val intent = Intent(Intent.ACTION_VIEW,
                             uriUrl)
                     layoutInflater.context.startActivity(intent)
@@ -74,7 +84,13 @@ class PostAdapter(val layoutInflater: LayoutInflater, val posts: List<Post>) :
                             .make(v!!, layoutInflater.context.getText(R.string.error_empty_site), Snackbar.LENGTH_SHORT)
                             .show()
             }
-        })
+        }
+        if(holder.itemViewType == 1) {
+            val event : Event = items[holder.adapterPosition] as Event
+            val eventHolder = holder as EventHolder
+            eventHolder.title.text = event.title
+            eventHolder.text.text = event.text
+        }
     }
 
     private fun getColorBack(i: Int): Int {
@@ -91,7 +107,7 @@ class PostAdapter(val layoutInflater: LayoutInflater, val posts: List<Post>) :
         return icons[0]
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class PostHolder(view: View) : RecyclerView.ViewHolder(view) {
         val card: CardView = view.findViewById(R.id.card)
         val title: TextView = view.findViewById(R.id.title)
         val text: TextView = view.findViewById(R.id.text)
@@ -99,5 +115,10 @@ class PostAdapter(val layoutInflater: LayoutInflater, val posts: List<Post>) :
         val back: LinearLayout = view.findViewById(R.id.back)
         val icon: ImageView = view.findViewById(R.id.icon)
         val link: ImageView = view.findViewById(R.id.link)
+    }
+
+    class EventHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val title: TextView = view.findViewById(R.id.title)
+        val text: TextView = view.findViewById(R.id.text)
     }
 }
