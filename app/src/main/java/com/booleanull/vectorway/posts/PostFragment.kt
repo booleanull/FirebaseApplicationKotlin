@@ -37,10 +37,12 @@ class NewsFragment : Fragment() {
     }
 
     private fun notifyItemsArray() {
-        items = posts as MutableList<ViewInPost>
+        items.clear()
+        for (p in posts) {
+            items.add(p as ViewInPost)
+        }
         if(!event.title.equals(""))
             items.add(0, event)
-        Toast.makeText(context, items.size.toString(), Toast.LENGTH_SHORT).show()
     }
 
     private fun getEventValueEventListener() : ValueEventListener {

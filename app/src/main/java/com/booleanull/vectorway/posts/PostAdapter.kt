@@ -85,7 +85,7 @@ class PostAdapter(val layoutInflater: LayoutInflater, private val items: Mutable
                             .show()
             }
         }
-        if(holder.itemViewType == 1) {
+        else if(holder.itemViewType == 1) {
             val event : Event = items[holder.adapterPosition] as Event
             val eventHolder = holder as EventHolder
             eventHolder.title.text = event.title
