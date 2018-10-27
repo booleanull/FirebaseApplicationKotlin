@@ -1,11 +1,14 @@
 package com.booleanull.vectorway.posts
 
+import android.view.View
+import android.widget.ProgressBar
 import com.google.firebase.database.*
 
-class PostFirebaseManager (val postAdapter: PostAdapter, val items : MutableList<ViewInPost> ){
+class PostFirebaseManager (val postAdapter: PostAdapter, val items : MutableList<ViewInPost>, val progressBar : ProgressBar){
 
     var event: Event = Event("", "")
     val posts: MutableList<Post> = mutableListOf<Post>()
+    var count : Int = 0
 
     init {
         val database = FirebaseDatabase.getInstance()
@@ -18,11 +21,11 @@ class PostFirebaseManager (val postAdapter: PostAdapter, val items : MutableList
 
     private fun notifyItemsArray() {
         items.clear()
+        if(!event.title.equals(""))
+            items.add(0, event)
         for (p in posts) {
             items.add(p as ViewInPost)
         }
-        if(!event.title.equals(""))
-            items.add(0, event)
     }
 
     private fun getEventValueEventListener() : ValueEventListener {
@@ -35,7 +38,6 @@ class PostFirebaseManager (val postAdapter: PostAdapter, val items : MutableList
                 notifyItemsArray()
                 postAdapter.notifyItemChanged(0)
             }
-
         }
     }
 
@@ -50,23 +52,25 @@ class PostFirebaseManager (val postAdapter: PostAdapter, val items : MutableList
             override fun onChildChanged(dataSnapshot: DataSnapshot, p1: String?) {
                 val post = dataSnapshot.getValue(Post::class.java)!!
                 val index = getItemIndex(post)
-                posts[index] = post
-                notifyItemsArray()
-                postAdapter.notifyItemChanged(index)
+                items[index+1] = post
+                postAdapter.notifyItemChanged(index+1)
             }
 
             override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
                 posts.add(dataSnapshot.getValue(Post::class.java)!!)
-                notifyItemsArray()
-                postAdapter.notifyDataSetChanged()
+                count++
+                if(count >= dataSnapshot.childrenCount) {
+                    progressBar.visibility = View.GONE
+                    notifyItemsArray()
+                    postAdapter.notifyDataSetChanged()
+                }
             }
 
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
                 val post = dataSnapshot.getValue(Post::class.java)!!
                 val index = getItemIndex(post)
-                posts.removeAt(index)
-                notifyItemsArray()
-                postAdapter.notifyItemChanged(index)
+                items.removeAt(index+1)
+                postAdapter.notifyItemChanged(index+1)
             }
 
         }

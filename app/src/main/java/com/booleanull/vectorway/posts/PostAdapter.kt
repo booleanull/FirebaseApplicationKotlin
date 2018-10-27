@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.booleanull.vectorway.R
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.layout_event.view.*
 import kotlinx.android.synthetic.main.layout_post.view.*
 
@@ -67,6 +68,11 @@ class PostAdapter(val layoutInflater: LayoutInflater, private val items: Mutable
 
                 eventHolder.title.text = event.title
                 eventHolder.text.text = event.text
+                if (event.image != "") {
+                    Picasso.get().load(Uri.parse(event.image)).into(eventHolder.photo);
+                    holder.card.visibility = View.VISIBLE
+                } else
+                    holder.card.visibility = View.GONE
             }
             // Post
             else -> {
@@ -91,7 +97,7 @@ class PostAdapter(val layoutInflater: LayoutInflater, private val items: Mutable
                     postHolder.link.visibility = View.VISIBLE
 
                 postHolder.card.setOnClickListener { v ->
-                    if (!post.site.equals("")) {
+                    if (post.site != "") {
                         val uriUrl = Uri.parse(post.site)
                         val intent = Intent(Intent.ACTION_VIEW,
                             uriUrl)
@@ -115,6 +121,8 @@ class PostAdapter(val layoutInflater: LayoutInflater, private val items: Mutable
     class EventHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title = view.titleEvent
         val text = view.textEvent
+        val photo = view.photoEvent
+        val card = view.cardEvent
     }
 
     class PostHolder(view: View) : RecyclerView.ViewHolder(view) {
