@@ -5,5 +5,6 @@ interface ViewInPost {
         get() = 0
     val id_event : Int
         get() = 1
+
     fun getViewId() : Int
 }
