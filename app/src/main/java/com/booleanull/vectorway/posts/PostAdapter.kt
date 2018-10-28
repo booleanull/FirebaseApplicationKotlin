@@ -8,10 +8,15 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import com.booleanull.vectorway.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.layout_event.view.*
 import kotlinx.android.synthetic.main.layout_post.view.*
+import android.provider.ContactsContract.CommonDataKinds.Note
+
+
 
 
 class PostAdapter(val layoutInflater: LayoutInflater, private val items: MutableList<ViewInPost>) :
@@ -75,7 +80,7 @@ class PostAdapter(val layoutInflater: LayoutInflater, private val items: Mutable
                 } else
                     holder.card.visibility = View.GONE
 
-                eventHolder.event.setOnClickListener { v ->
+                eventHolder.event.setOnClickListener {
                     if (event.site != "") {
                         val uriUrl = Uri.parse(event.site)
                         val intent = Intent(
@@ -146,6 +151,5 @@ class PostAdapter(val layoutInflater: LayoutInflater, private val items: Mutable
         val back = view.back
         val icon = view.icon
         val link = view.link
-        val show = view.textShow
     }
 }

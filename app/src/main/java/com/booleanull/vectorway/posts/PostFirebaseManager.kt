@@ -1,13 +1,20 @@
 package com.booleanull.vectorway.posts
 
 import android.view.View
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ProgressBar
 import com.google.firebase.database.*
+import android.provider.ContactsContract.CommonDataKinds.Note
 
-class PostFirebaseManager (val postAdapter: PostAdapter, val items : MutableList<ViewInPost>, val progressBar : ProgressBar){
+
+
+class PostFirebaseManager (val postAdapter: PostAdapter, val items : MutableList<ViewInPost>, val progressBar : ProgressBar) : Filterable{
 
     var event: Event = Event("", "")
     val posts: MutableList<Post> = mutableListOf<Post>()
+    var sortPosts : MutableList<Post> = mutableListOf()
+    var search : String = ""
     var count : Int = 0
 
     init {
@@ -23,7 +30,7 @@ class PostFirebaseManager (val postAdapter: PostAdapter, val items : MutableList
         items.clear()
         if(!event.title.equals(""))
             items.add(0, event)
-        for (p in posts) {
+        for (p in sortPosts) {
             items.add(p as ViewInPost)
         }
     }
@@ -61,8 +68,7 @@ class PostFirebaseManager (val postAdapter: PostAdapter, val items : MutableList
                 count++
                 if(count >= dataSnapshot.childrenCount) {
                     progressBar.visibility = View.GONE
-                    notifyItemsArray()
-                    postAdapter.notifyDataSetChanged()
+                    filter.filter(search)
                 }
             }
 
@@ -72,19 +78,46 @@ class PostFirebaseManager (val postAdapter: PostAdapter, val items : MutableList
                 items.removeAt(index+1)
                 postAdapter.notifyItemChanged(index+1)
             }
-
         }
     }
 
     private fun getItemIndex(post: Post): Int {
         var index = -1
 
-        for ((id) in posts) {
+        for ((id) in sortPosts) {
             if (id == post.id) {
                 index = id
                 break
             }
         }
         return index
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(charSequence: CharSequence): Filter.FilterResults {
+                search = charSequence.toString()
+                if (search.isEmpty()) {
+                    sortPosts = posts
+                } else {
+                    val filteredPosts = mutableListOf<Post>()
+                    for (post in posts) {
+                        if (post.text.toLowerCase().contains(search) || post.title.toLowerCase().contains(search)
+                            || post.date.toLowerCase().contains(search))
+                            filteredPosts.add(post)
+                    }
+                    sortPosts = filteredPosts
+                }
+
+                val filterResults = Filter.FilterResults()
+                filterResults.values = sortPosts
+                return filterResults
+            }
+
+            override fun publishResults(charSequence: CharSequence, filterResults: Filter.FilterResults) {
+                sortPosts = filterResults.values as MutableList<Post>
+                notifyItemsArray()
+            }
+        }
     }
 }

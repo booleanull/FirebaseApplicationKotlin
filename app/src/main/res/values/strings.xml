@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">VectorWay</string>
+    <string name="post">Новости</string>
+    <string name="users">Пользователи</string>
+    <string name="personal">Профиль</string>
+    <string name="search">Поиск</string>
     <string name="error_empty_site">Отсутствует прикрепленная ссылка.</string>
-    <string name="show">Показать полностью</string>
-    <string name="hide">Скрыть</string>
 </resources>
