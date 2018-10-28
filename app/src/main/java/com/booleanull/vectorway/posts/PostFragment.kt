@@ -16,20 +16,19 @@ import android.view.*
 
 class NewsFragment : Fragment() {
 
-    class ViewPostList(val items : MutableList<ViewInPost>) : MutableList<ViewInPost> by items
-    private val viewPostList : ViewPostList = ViewPostList(mutableListOf())
+    private val viewPostList : MutableList<ViewInPost> = mutableListOf()
     lateinit var postFirebaseManager : PostFirebaseManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v : View = inflater.inflate(R.layout.fragment_post, container, false)
-        activity!!.title = inflater.context.resources.getString(R.string.post)
-        setHasOptionsMenu(true);
         val recyclerView = v.recyclerView
         val progressBar = v.progressBar
 
+        activity!!.title = inflater.context.resources.getString(R.string.post)
+        setHasOptionsMenu(true);
+
         val postAdapter = PostAdapter(layoutInflater, viewPostList)
         postFirebaseManager = PostFirebaseManager(postAdapter, viewPostList, progressBar)
-
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = postAdapter
         return v

@@ -7,17 +7,12 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
 import com.booleanull.vectorway.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.layout_event.view.*
 import kotlinx.android.synthetic.main.layout_post.view.*
-import android.provider.ContactsContract.CommonDataKinds.Note
-
-
-
 
 class PostAdapter(val layoutInflater: LayoutInflater, private val items: MutableList<ViewInPost>) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -80,16 +75,7 @@ class PostAdapter(val layoutInflater: LayoutInflater, private val items: Mutable
                 } else
                     holder.card.visibility = View.GONE
 
-                eventHolder.event.setOnClickListener {
-                    if (event.site != "") {
-                        val uriUrl = Uri.parse(event.site)
-                        val intent = Intent(
-                            Intent.ACTION_VIEW,
-                            uriUrl
-                        )
-                        layoutInflater.context.startActivity(intent)
-                    }
-                }
+                eventHolder.event.setOnClickListener(onClickLink(event.site))
             }
             // Post
             else -> {
@@ -103,36 +89,43 @@ class PostAdapter(val layoutInflater: LayoutInflater, private val items: Mutable
                 postHolder.back.setBackgroundColor(
                     ContextCompat.getColor(
                         layoutInflater.context,
-                        getSaveData(post.level, colors)
+                        getData(post.level, colors)
                     )
                 )
-                postHolder.icon.setImageResource(getSaveData(post.way, icons))
+                postHolder.icon.setImageResource(getData(post.way, icons))
 
                 if (post.site.equals(""))
                     postHolder.link.visibility = View.GONE
                 else
                     postHolder.link.visibility = View.VISIBLE
 
-                postHolder.card.setOnClickListener { v ->
-                    if (post.site != "") {
-                        val uriUrl = Uri.parse(post.site)
-                        val intent = Intent(Intent.ACTION_VIEW,
-                            uriUrl)
-                        layoutInflater.context.startActivity(intent)
-                    } else
-                        Snackbar
-                            .make(v!!, layoutInflater.context.getText(R.string.error_empty_site), Snackbar.LENGTH_SHORT)
-                            .show()
-                }
+                postHolder.card.setOnClickListener(onClickLink(post.site))
             }
         }
     }
 
-    private fun getSaveData(i: Int, array : kotlin.Array<Int>): Int {
+    private fun getData(i: Int, array: kotlin.Array<Int>): Int {
         if (i in 0..(array.size - 1)) {
             return array[i]
         }
         return array[0]
+    }
+
+    private fun onClickLink(site: String): OnClickListener {
+        return OnClickListener {
+            if (site != "") {
+                val uriUrl = Uri.parse(site)
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    uriUrl
+                )
+                layoutInflater.context.startActivity(intent)
+            } else {
+                Snackbar
+                    .make(it, layoutInflater.context.getText(R.string.error_empty_site), Snackbar.LENGTH_SHORT)
+                    .show()
+            }
+        }
     }
 
     class EventHolder(view: View) : RecyclerView.ViewHolder(view) {
