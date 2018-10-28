@@ -68,15 +68,27 @@ class PostAdapter(val layoutInflater: LayoutInflater, private val items: Mutable
 
                 eventHolder.title.text = event.title
                 eventHolder.text.text = event.text
+
                 if (event.image != "") {
                     Picasso.get().load(Uri.parse(event.image)).into(eventHolder.photo);
                     holder.card.visibility = View.VISIBLE
                 } else
                     holder.card.visibility = View.GONE
+
+                eventHolder.event.setOnClickListener { v ->
+                    if (event.site != "") {
+                        val uriUrl = Uri.parse(event.site)
+                        val intent = Intent(
+                            Intent.ACTION_VIEW,
+                            uriUrl
+                        )
+                        layoutInflater.context.startActivity(intent)
+                    }
+                }
             }
             // Post
             else -> {
-                val post : Post = items[holder.adapterPosition] as Post
+                var post : Post = items[holder.adapterPosition] as Post
                 val postHolder = holder as PostHolder
 
                 postHolder.title.text = post.title
@@ -123,6 +135,7 @@ class PostAdapter(val layoutInflater: LayoutInflater, private val items: Mutable
         val text = view.textEvent
         val photo = view.photoEvent
         val card = view.cardEvent
+        val event = view.event
     }
 
     class PostHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -133,5 +146,6 @@ class PostAdapter(val layoutInflater: LayoutInflater, private val items: Mutable
         val back = view.back
         val icon = view.icon
         val link = view.link
+        val show = view.textShow
     }
 }
