@@ -66,8 +66,9 @@ class PostFirebaseManager (val postAdapter: PostAdapter, val items : MutableList
                 if(count >= dataSnapshot.childrenCount) {
                     progressBar.visibility = View.GONE
                     sortPosts = posts
-                    notifyItemsArray()
                 }
+
+                notifyItemsArray()
             }
 
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {

@@ -79,7 +79,7 @@ class PostAdapter(val layoutInflater: LayoutInflater, private val items: Mutable
             }
             // Post
             else -> {
-                var post : Post = items[holder.adapterPosition] as Post
+                val post : Post = items[holder.adapterPosition] as Post
                 val postHolder = holder as PostHolder
 
                 postHolder.title.text = post.title
@@ -120,11 +120,9 @@ class PostAdapter(val layoutInflater: LayoutInflater, private val items: Mutable
                     uriUrl
                 )
                 layoutInflater.context.startActivity(intent)
-            } else {
-                Snackbar
-                    .make(it, layoutInflater.context.getText(R.string.error_empty_site), Snackbar.LENGTH_SHORT)
-                    .show()
-            }
+            } /*else {
+                Snackbar.make(it, layoutInflater.context.getText(R.string.error_empty_site), Snackbar.LENGTH_SHORT).show()
+            }*/
         }
     }
 
