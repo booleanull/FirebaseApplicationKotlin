@@ -120,8 +120,9 @@ class PostFirebaseManager (val postAdapter: PostAdapter, val items : MutableList
                     filteredPosts = posts
                 } else {
                     for (post in posts) {
+                        val type = getTypeString(post)
                         if (post.text.toLowerCase().contains(search) || post.title.toLowerCase().contains(search)
-                            || post.date.toLowerCase().contains(search))
+                            || post.date.toLowerCase().contains(search) || type.contains(search))
                             filteredPosts.add(post)
                     }
                 }
@@ -134,6 +135,20 @@ class PostFirebaseManager (val postAdapter: PostAdapter, val items : MutableList
             override fun publishResults(charSequence: CharSequence, filterResults: Filter.FilterResults) {
                 notifyItemsArray()
             }
+        }
+    }
+
+    fun getTypeString(post : Post) : String {
+        when(post.way) {
+            1 -> return "ai"
+            2 -> return "desktop"
+            3 -> return "gamedev"
+            4 -> return "android"
+            5 -> return "ios"
+            6 -> return "frontend"
+            7 -> return "backend"
+            8 -> return "lowlevel"
+            else -> return "free"
         }
     }
 }
