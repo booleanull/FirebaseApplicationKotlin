@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import com.booleanull.vectorway.personal.PersonalFragment
 import com.booleanull.vectorway.posts.NewsFragment
 import com.booleanull.vectorway.users.UsersFragment
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -57,6 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         val navigation = navigation
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        FirebaseMessaging.getInstance().subscribeToTopic("all")
     }
 
     private fun setFragment(id: Int, fragment: Fragment, idfrag: Int) {
