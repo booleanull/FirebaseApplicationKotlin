@@ -8,4 +8,6 @@
 
     <string name="search">Поиск</string>
     <string name="error_empty_site">Отсутствует прикрепленная ссылка.</string>
+    <string name="toasterrorauth">Ошибка! Повторите попытку позже</string>
+    <string name="signwithgoogle">Войти через Google</string>
 </resources>
