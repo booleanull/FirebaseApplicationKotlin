@@ -1,27 +1,35 @@
 {
   "project_info": {
-    "project_number": "989987015668",
-    "firebase_url": "https://vector-7cbdc.firebaseio.com",
-    "project_id": "vector-7cbdc",
-    "storage_bucket": "vector-7cbdc.appspot.com"
+    "project_number": "744779672421",
+    "firebase_url": "https://vectorway-25565.firebaseio.com",
+    "project_id": "vectorway-25565",
+    "storage_bucket": "vectorway-25565.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:989987015668:android:d47faf8611b0cd48",
+        "mobilesdk_app_id": "1:744779672421:android:d47faf8611b0cd48",
         "android_client_info": {
           "package_name": "com.booleanull.vectorway"
         }
       },
       "oauth_client": [
         {
-          "client_id": "989987015668-k8681k85e2rekfrjq7sf8g1kkj8074jk.apps.googleusercontent.com",
+          "client_id": "744779672421-eqmle6ri2t11074jmkpu4s8ph8movr02.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.booleanull.vectorway",
+            "certificate_hash": "8b08d4886c76c0b4d68f7d05918eac7e81acce7d"
+          }
+        },
+        {
+          "client_id": "744779672421-5kb6nt2heo6ekratpjvpoomnakrkupp9.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB2kMD-ae-dZHdbK4aP0JB8IjN9TzEmPRA"
+          "current_key": "AIzaSyBFE0adB6f2fb_PKgOxd40T-2cNhdkem1I"
         }
       ],
       "services": {
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "744779672421-5kb6nt2heo6ekratpjvpoomnakrkupp9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
