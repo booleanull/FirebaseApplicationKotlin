@@ -6,4 +6,3 @@
 
 ### Other
 #### RecyclerView with different views
-g
